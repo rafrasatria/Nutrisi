@@ -26,12 +26,18 @@ Edit `.env`: `DB_DATABASE=nutrisi` (buat database kosong dulu) + user/password M
 
 ```
 php artisan migrate --seed
-php artisan serve
+php artisan serve --host=0.0.0.0 --port=8000
 ```
 
-Buka `http://localhost:8000`. Akun coba: siswa `siswa1 / siswa123`, guru: pilih kelas + `guru123`.
+Buka `http://localhost:8000` di laptop itu. Akun coba: siswa `siswa1 / siswa123`, guru: pilih kelas + `guru123`.
 
-Biar bisa dibuka perangkat lain se-WiFi: `php artisan serve --host=0.0.0.0 --port=8000`, lalu buka `http://IP-LAPTOP:8000` (cek IP lewat `ipconfig`), izinkan akses di Windows Firewall.
+Perangkat lain se-WiFi membuka `http://IP-LAPTOP:8000` (cek IP lewat `ipconfig` → Wireless LAN adapter WiFi → IPv4 Address).
+
+Kalau HP/teman tidak bisa membuka padahal laptop bisa:
+1. Pastikan perintah serve memakai `--host=0.0.0.0` (di terminal harus tertulis `Server running on [http://0.0.0.0:8000]`).
+2. Pastikan HP dan laptop di WiFi yang sama, dan IP belum berubah (cek `ipconfig` lagi).
+3. Izinkan di Windows Firewall (popup "Allow access" untuk PHP, atau izinkan port 8000 TCP).
+4. Kalau laptop bisa dibuka lewat IP tapi HP tetap tidak bisa, berarti WiFi-nya memblokir antar-perangkat (umum di WiFi kampus/kantor) — solusinya laptop ikut hotspot HP, lalu ulangi cek IP.
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 

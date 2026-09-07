@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-# Render menyuntik $PORT — arahkan Apache ke sana
-PORT="${PORT:-80}"
+# Render/Koyeb menyuntik $PORT; Hugging Face Spaces memakai 7860 (lihat README).
+PORT="${PORT:-7860}"
 sed -i "s/Listen 80/Listen $PORT/" /etc/apache2/ports.conf
 sed -i "s/<VirtualHost \*:80>/<VirtualHost *:$PORT>/" /etc/apache2/sites-available/000-default.conf
 

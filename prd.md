@@ -286,7 +286,17 @@ Hub: `GET siswa/misi` (Papan Misi) menampilkan status + skor tiap berkas + tombo
 17. Dashboard siswa + detail guru + kedua PDF memuat tabel nilai 5 misi.
 18. Test `NutrisiTest::test_full_flow` mencakup seluruh alur misi (57 assertions, lolos).
 
-## 17. Deploy ke Render (2026-09-07)
+## 17. Deploy (2026-09-07)
 
-- File: `Dockerfile` (PHP 8.4-apache + pdo_mysql/pgsql, gd, zip; migrate+seed+cache saat start), `docker-entrypoint.sh`, `.dockerignore`, `render.yaml` (web Docker + Postgres 16 gratis).
-- Catatan: proyek tidak memakai `@vite`, jadi tanpa build Node. Di dashboard Render: New → Blueprint → pilih repo (isi `render.yaml`), lalu set manual `APP_URL=https://<service>.onrender.com`. Database gratis Render bertipe Postgres dan punya batas masa/kuota — untuk pemakaian kelas jangka panjang pertimbangkan Postgres berbayar atau hosting PHP+MySQL lokal (Hostinger/Niagahoster).
+- File: `Dockerfile` (PHP 8.4-apache + pdo_mysql/pgsql, gd, zip; migrate+seed+cache saat start; hormat `$PORT`, default 7860), `docker-entrypoint.sh`, `.dockerignore`, `render.yaml` (web Docker + Postgres 16), frontmatter Docker Space di `README.md`.
+- Render butuh kartu/paket berbayar, jadi untuk gratis tanpa kartu gunakan:
+  1. **Hugging Face Spaces (Docker)** — gratis, tanpa kartu. Buat Space, pilih SDK Docker, hubungkan repo ini. Di Settings lalu Variables isi: `APP_ENV=production`, `APP_DEBUG=false`, `APP_KEY=` (dari `php artisan key:generate --show`), `APP_URL=https://<user>-<spasi>.hf.space`, `DB_CONNECTION=pgsql` beserta `DB_HOST/PORT/DATABASE/USERNAME/PASSWORD` dari database luar, `SESSION_DRIVER=database`, `CACHE_STORE=database`, `QUEUE_CONNECTION=database`, `LOG_CHANNEL=stderr`. Space tidur setelah sekitar 48 jam idle dan bangun otomatis saat dibuka.
+  2. **Database gratis**: Neon atau Supabase (Postgres gratis tanpa kartu) — buat project, salin connection string ke Variables Space di atas. Migrasi dan seed jalan otomatis saat Space start.
+  3. **Demo kilat tanpa deploy**: dari laptop yang menjalankan `php artisan serve`, jalankan `cloudflared tunnel --url http://localhost:8000` untuk URL publik HTTPS gratis (laptop harus tetap menyala).
+- Shared hosting gratis tidak disarankan: proyek butuh PHP ^8.3 (umumnya mentok 8.2) dan Composer/SSH. Proyek tidak memakai `@vite`, jadi tanpa build Node. Render tetap bisa dipakai via `render.yaml` bila nanti ada paket berbayar.
+- Pengecualian 2026: InfinityFree sudah mendukung PHP 8.3 + MySQL sehingga bisa dipakai via upload FTP (tanpa SSH/Composer), lihat §18.
+
+## 18. Deploy InfinityFree / shared PHP+MySQL (FTP, tanpa SSH)
+
+Syarat: PHP 8.3 aktif di control panel. Inti: isi folder `public/` dipindah ke `htdocs/`, sisa project ke folder sibling (mis. `/nutrisi-core/`), path di `htdocs/index.php` diubah ke `__DIR__.'/../nutrisi-core/...'`, `.env` produksi berisi DB hosting + `APP_DEBUG=false` + `CACHE_STORE=file` + `QUEUE_CONNECTION=sync`, dump SQL lokal di-import via phpMyAdmin hosting. Batas upload 10 MB per file sehingga upload lewat FTP file-per-file (FileZilla). Detail langkah ada di panduan chat 2026-09-07.
+- Proyek tidak memakai `@vite`, jadi tanpa build Node. Render tetap bisa dipakai via `render.yaml` bila nanti ada paket berbayar.

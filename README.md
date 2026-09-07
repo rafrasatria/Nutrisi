@@ -1,3 +1,38 @@
+---
+title: Detektif Nutrisi
+colorFrom: red
+colorTo: brown
+sdk: docker
+app_port: 7860
+---
+
+# Detektif Nutrisi — Kuis Makanan & Minuman (Laravel)
+
+Media pembelajaran nutrisi: siswa mengerjakan 7 soal + 5 berkas misi (Lab Mi, Mencocokkan, Materi & Kuis Organ, Susun Jalur), isi kesimpulan + refleksi, unduh PDF. Guru memantau per kelas + rekap PDF.
+
+## Cara menjalankan (untuk orang lain)
+
+Syarat: PHP 8.3+, Composer, MySQL (mis. Laragon/XAMPP).
+
+```
+git clone https://github.com/rafrasatria/Nutrisi.git
+cd Nutrisi
+composer install
+copy .env.example .env
+php artisan key:generate
+```
+
+Edit `.env`: `DB_DATABASE=nutrisi` (buat database kosong dulu) + user/password MySQL masing-masing, lalu:
+
+```
+php artisan migrate --seed
+php artisan serve
+```
+
+Buka `http://localhost:8000`. Akun coba: siswa `siswa1 / siswa123`, guru: pilih kelas + `guru123`.
+
+Biar bisa dibuka perangkat lain se-WiFi: `php artisan serve --host=0.0.0.0 --port=8000`, lalu buka `http://IP-LAPTOP:8000` (cek IP lewat `ipconfig`), izinkan akses di Windows Firewall.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
